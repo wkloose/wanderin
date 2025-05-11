@@ -8,6 +8,10 @@ import (
 	"wanderin/internal/registerlogin/repositories"
 	"wanderin/internal/middleware"
 	"wanderin/config"
+	"wanderin/internal/info_destination/maps_handlers"
+	"wanderin/internal/info_destination/maps_services"
+	"wanderin/internal/info_destination/repository"
+
 )
 
 func SetupRouter() *gin.Engine {
@@ -29,6 +33,20 @@ func SetupRouter() *gin.Engine {
 	protected := router.Group("/")
 	protected.Use(middleware.AuthMiddleware())
 	protected.GET("/profile", authHandler.GetProfile)
+
+	infoDestinationHandler := &maps_handlers.MapsHandler{
+		MapsService: &maps_services.MapsService{},
+	}
+	router.GET("/location", infoDestinationHandler.GetLocation)
+	router.GET("/places", infoDestinationHandler.GetNearbyPlaces)
+
+	destinationRepo := &repository.DestinationRepository{DB: config.DB}
+	destinationService := &maps_services.DestinationService{Repo: destinationRepo}
+	destinationHandler := &maps_handlers.DestinationHandler{Service: destinationService}
+
+	router.POST("/destination", destinationHandler.AddDestination)
+	router.GET("/destinations", destinationHandler.GetDestinations)
+
 
 	return router
 }
