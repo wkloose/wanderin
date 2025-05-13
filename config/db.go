@@ -9,6 +9,7 @@ import (
 	"gorm.io/gorm"
 	"github.com/joho/godotenv"
 	"wanderin/internal/registerlogin/models"
+	"wanderin/internal/info_destination/models1"
 )
 
 var DB *gorm.DB
@@ -30,6 +31,8 @@ func InitDB() {
 
 	log.Println("Running AutoMigrate for User model")
 	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models1.Destination{})
+
 
 	DB = db
 	log.Println("Database connected and migrated successfully!")

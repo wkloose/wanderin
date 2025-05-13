@@ -45,7 +45,7 @@ func SetupRouter() *gin.Engine {
 	destinationHandler := &maps_handlers.DestinationHandler{Service: destinationService}
 
 	router.POST("/destination", destinationHandler.AddDestination)
-	router.GET("/destinations", destinationHandler.GetDestinations)
+	router.GET("/destination", destinationHandler.GetDestinations)
 
 
 	return router
